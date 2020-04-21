@@ -9,25 +9,22 @@ function makePageForEpisodes (episodeList) {
   rootElem.textContent = `Got ${episodeList.length} episode(s)`;
 
   rootElem.classList.add ('container');
-  document.querySelector ('.container').setAttribute ('display', 'flex');
-  document.querySelector ('.container').setAttribute ('flexWrap', 'wrap');
+
+  rootElem.setAttribute ('class', 'container');
+  rootElem.setAttribute ('style', 'display:flex');
+  rootElem.setAttribute ('style', 'flexWrap:wrap');
 
   for (let i = 0; i < episodeList.length; i++) {
     // Creating a div element
     let divElement = document.createElement ('Div');
-
+    divElement.classList.add ('episode');
     divElement.setAttribute ('class', 'episode');
-    divElement.setAttribute ('overflow', 'hidden');
-    divElement.setAttribute ('background', 'white');
-    divElement.setAttribute ('borderRadius', '12px');
-    divElement.setAttribute ('margin', '1rem');
-    // Styling it
-    /*
+    // Styling it    
     divElement.style.overflow = 'hidden';
     divElement.style.background = 'white';
     divElement.style.borderRadius = '12px';
     divElement.style.margin = '1rem';
-    */
+    
 
     // Adding h1 to it
     let h1Elem = document.createElement ('h1');
@@ -53,7 +50,7 @@ function makePageForEpisodes (episodeList) {
     // Styling image
     imageElem.style.width = '100%';
     imageElem.style.height = 'auto';
-    imageElem.style.display = '1.inline-block';
+    imageElem.style.display = 'inline-block';
     imageElem.style.borderRadius = '5px';
     // Adding a paragraph to it
     let paragraph = document.createElement ('P');
@@ -68,7 +65,7 @@ function makePageForEpisodes (episodeList) {
   const info = document.createElement ('a');
   const infoPar = document.createElement ('h3');
   info.setAttribute ('href', 'https://www.tvmaze.com/api#licensing');
-  infoPar.innerHTML = 'The data has (originally) come from  ';  
+  infoPar.innerHTML = 'The data has (originally) come from  ';
   info.innerHTML = 'tvmaze.com/api#licensing';
   infoPar.appendChild (info);
   document.body.appendChild (infoPar);
