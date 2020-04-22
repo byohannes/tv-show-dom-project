@@ -3,45 +3,15 @@ function setup () {
   const allEpisodes = getAllEpisodes ();
   makePageForEpisodes (allEpisodes);
 }
-const allEpisodes = getAllEpisodes ();
-const rootElem = document.getElementById ('root');
-let searchLabel = document.createElement ('label');
-let searchBox = document.createElement ('input');
 
-searchBox.setAttribute ('type', 'text');
-document.body.appendChild (searchBox);
-document.body.appendChild (searchLabel);
-// Init a timeout variable to be used below
-let timeout = null;
-// Listen for keystroke events
-searchBox.addEventListener ('keyup', function (e) {
-  // Clear the timeout if it has already been set.
-  clearTimeout (timeout);
-  // Make a new timeout set to go off in 1 second
-  timeout = setTimeout (function () {
-    let results = [], key;
-    let searchKey = searchBox.value;
-    var regexp = new RegExp (searchKey, 'g');
-    if (searchKey === '') {
-      clearTimeout (timeout);
-      makePageForEpisodes (allEpisodes);
-    } else {
-      for (let i = 0; i < allEpisodes.length; i++) {
-        if (
-          allEpisodes[i]['name'].match (regexp) ||
-          allEpisodes[i]['summary'].match (regexp)
-        ) {
-          results.push (allEpisodes[i]);
-          makePageForEpisodes (results);
-        }
-      }
-      clearTimeout (timeout);
-      searchLabel.innerHTML = `   Displaying ${results.length}/${allEpisodes.length} episode(s)`;
-    }
-  }, 1000);
-});
 function makePageForEpisodes (episodeList) {
-  searchLabel.innerHTML = `   Displaying ${allEpisodes.length}/${allEpisodes.length} episode(s)`;
+  const rootElem = document.getElementById ('root');
+  let searchLabel = document.createElement ('label');
+  let searchBox = document.createElement ('input');
+  searchLabel.innerHTML = `   Displaying ${episodeList.length}/${episodeList.length} episode(s)`;
+  searchBox.setAttribute ('type', 'text');
+  document.body.appendChild (searchBox);
+  document.body.appendChild (searchLabel);
   for (let i = 0; i < episodeList.length; i++) {
     // Creating a div element for episode
     let divElement = document.createElement ('Div');
@@ -70,6 +40,27 @@ function makePageForEpisodes (episodeList) {
     // Appending the div element to body
     rootElem.appendChild (divElement);
     document.body.appendChild (rootElem);
+    //search
+
+    // Listen for keystroke events
+    searchBox.addEventListener ('keyup', () => {
+      let searchKey = searchBox.value.toLowerCase ();
+      let searchCount = 0;
+      let arrayEpisodes = Array.from (
+        document.getElementsByClassName ('episodeContainer')
+      );
+
+      arrayEpisodes.forEach (div => {
+        let textInfo = div.innerText.toLowerCase ();
+        if (textInfo.indexOf (searchKey) != -1) {
+          div.style.display = 'block';
+          searchCount += 1;
+        } else {
+          div.style.display = 'none';
+        }
+      });
+      searchLabel.innerHTML = `   Displaying ${searchCount}/${episodeList.length} episode(s)`;
+    });
   }
   const info = document.createElement ('a');
   const infoPar = document.createElement ('h4');
