@@ -1,22 +1,35 @@
 body {
+  margin: 0;
+  padding: 0;
   background-color: lightgray;
 }
 #root {
-  color: black;
-  width: 100%;
   display: flex;
-  margin: 60px;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  flex-direction: column;
 }
-
-.episodeContainer {
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.search {
+  display: flex;
+  align-content: center;
   align-items: center;
+  margin: 10px 10px;
+  padding: 10px;
+}
+.searchEpisode {
+  text-align: center;
+  margin: 10px;
+}
+.episodeContainer {
   border-radius: 8px;
   background-color: white;
-  margin: 10px;
+  margin: 15px;
   text-align: center;
   width: 25%;
+  display: block;
 }
 h1 {
   text-align: center;
@@ -32,12 +45,13 @@ img {
   border-radius: 5px;
 }
 p {
-  padding: 3px;
-  margin: 0;
-  text-justify: auto;
+  padding-left: 10px;
+  padding-right: 5px;
+  text-align: left;
 }
-input[type='text'] {
-  margin: 20px;
-  height: 30px;
+input {
+  text-align: justify;
+  width: 250px;
+  padding: 10px;
   border: 2px solid lightgray;
 }
