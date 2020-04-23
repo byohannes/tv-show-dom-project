@@ -61,3 +61,15 @@ input {
   padding: 10px;
   border-radius: 5px;
 }
+
+@media (max-width: 576px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .search {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
