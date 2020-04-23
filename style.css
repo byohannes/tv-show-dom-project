@@ -15,8 +15,9 @@ body {
 .search {
   display: flex;
   align-self: center;
-  margin: 10px 10px;
-  padding: 10px;
+  margin-top: 20px;
+  padding: 5px;
+  border: 2px double black;
 }
 .searchEpisode {
   text-align: center;
