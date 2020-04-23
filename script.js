@@ -55,7 +55,7 @@ selectList.addEventListener ('click', () => {
   //Create and append the options of select input
   for (let index = 0; index < allEpisodes.length; index++) {
     let option = document.createElement ('option');
-    
+
     option.text =
       'S' +
       allEpisodes[index]['season'].toString ().padStart (2, '0') +
@@ -81,7 +81,7 @@ function searchFunc () {
   }
   searchCount = 0;
   let arrayEpisodes = Array.from (
-    document.getElementsByClassName ('episodeContainer')
+    document.querySelectorAll ('.episodeContainer')
   );
   epiListLength = arrayEpisodes.length;
   arrayEpisodes.forEach (show => {
