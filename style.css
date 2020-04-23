@@ -77,6 +77,9 @@ input {
     justify-content: center;
     align-items: baseline;
   }
+  p{
+    font-size: 20px;
+  }
   img{
     width: 70%;
   }
