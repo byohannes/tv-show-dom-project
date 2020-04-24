@@ -1,7 +1,8 @@
-//You can edit ALL of the code here
 function setup () {
   makePageForEpisodes (allEpisodes);
+  selectInputLoad (allEpisodes);
 }
+
 const allEpisodes = getAllEpisodes ();
 const rootElem = document.getElementById ('root');
 //a container for all episodes
@@ -10,7 +11,7 @@ divContainer.className = 'container';
 //Create and append select list
 let selectList = document.createElement ('select');
 selectList.id = 'mySelect';
-// search box
+// create search box
 let searchBox = document.createElement ('legend');
 searchBox.innerHTML = 'Search';
 searchBox.appendChild (selectList);
@@ -24,7 +25,6 @@ searchLabel.className = 'searchEpisode';
 searchBox.appendChild (searchLabel);
 rootElem.appendChild (divContainer);
 function makePageForEpisodes (episodeList) {
-  //searchLabel.innerHTML = `Displaying ${episodeList.length}/${episodeList.length} episode(s)`;
   for (let i = 0; i < episodeList.length; i++) {
     // Creating a div element for each episode
     let divElement = document.createElement ('Div');
@@ -50,35 +50,43 @@ function makePageForEpisodes (episodeList) {
   }
   searchFunc ();
 }
-selectList.addEventListener ('change', searchFunc);
-selectList.addEventListener ('click', () => {
-  //Create and append the options of select input
-  for (let index = 0; index < allEpisodes.length; index++) {
-    let option = document.createElement ('option');
 
-    option.text =
-      'S' +
-      allEpisodes[index]['season'].toString ().padStart (2, '0') +
-      'E' +
-      allEpisodes[index]['number'].toString ().padStart (2, '0') +
-      ' - ' +
-      allEpisodes[index].name;
-    selectList.appendChild (option);
-  }
-});
 // Search by Listening for keystroke events
 searchInput.addEventListener ('keyup', searchFunc);
 let epiListLength;
 let searchCount;
 let searchKey;
+
+function selectInputLoad (showList) {
+  //Create and append the options of select input
+  let option1 = document.createElement ('option');
+  option1.value = 'All Episodes';
+  option1.text = 'All Episodes';
+  selectList.appendChild (option1);
+  for (let index = 0; index < showList.length; index++) {
+    let option = document.createElement ('option');
+    option.text =
+      'S' +
+      showList[index]['season'].toString ().padStart (2, '0') +
+      'E' +
+      showList[index]['number'].toString ().padStart (2, '0') +
+      ' - ' +
+      showList[index].name;
+    selectList.appendChild (option);
+  }
+}
+
 function searchFunc () {
   if (searchInput.value === '') {
-    searchKey = selectList.value
-      .substr (9, selectList.value.length - 1)
-      .toLowerCase ();
+    if (selectList.value.substr (0, 6) === 'All Ep') {
+      searchKey = '';
+    } else {
+      searchKey = selectList.value.substr (0, 6).toLowerCase ();
+    }
   } else {
     searchKey = searchInput.value.toLowerCase ();
   }
+  console.log (searchKey);
   searchCount = 0;
   let arrayEpisodes = Array.from (
     document.querySelectorAll ('.episodeContainer')
@@ -93,15 +101,21 @@ function searchFunc () {
       show.style.display = 'none';
     }
   });
-  searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episode(s)`;
+  if (searchCount == 1) {
+    searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episode`;
+  } else {
+    searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episodes`;
+  }
 }
+selectList.addEventListener ('change', searchFunc);
+
 // Link to the source of data href', 'https://www.tvmaze.com/api#licensing'
 const info = document.createElement ('a');
 const infoPar = document.createElement ('h4');
+infoPar.id = 'tvLink';
 info.setAttribute ('href', 'https://www.tvmaze.com/api#licensing');
 infoPar.innerHTML = 'The data has (originally) come from  ';
-info.innerHTML = 'tvmaze.com/api#licensing';
+info.innerHTML = 'tvmaze.com';
 infoPar.appendChild (info);
 document.body.appendChild (infoPar);
-
 window.onload = setup;

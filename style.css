@@ -52,6 +52,9 @@ p {
   padding-right: 5px;
   text-align: left;
 }
+#tvLink {
+  text-align: center;
+}
 #mySelect {
   margin: 20px;
   padding: 10px;
@@ -72,22 +75,27 @@ input {
     align-items: center;
   }
   .episodeContainer {
-    width: 70%;
-    margin: 20px;
+    width: 90%;
+    margin: 10px;
     justify-content: center;
     align-items: baseline;
   }
-  p{
+  p {
     font-size: 20px;
   }
-  img{
+  img {
     width: 70%;
   }
-  h1{
+  h1 {
     font-size: 20px;
     text-align: center;
   }
-}
+  #tvLink {
+    text-align: center;
+  }
+  #mySelect {
+    width: 60%;
+  }
   .search {
     flex-direction: column;
     justify-content: center;
