@@ -10,8 +10,8 @@ let divContainer = document.createElement ('div');
 divContainer.className = 'container';
 //Create and append select list
 let selectList = document.createElement ('select');
-selectList.id = 'mySelect';
-// create search box
+selectList.className = 'mySelect';
+// create a legend for search boxes
 let searchBox = document.createElement ('legend');
 searchBox.innerHTML = 'Search';
 searchBox.appendChild (selectList);
@@ -24,13 +24,14 @@ let searchLabel = document.createElement ('h3');
 searchLabel.className = 'searchEpisode';
 searchBox.appendChild (searchLabel);
 rootElem.appendChild (divContainer);
+
 function makePageForEpisodes (episodeList) {
   for (let i = 0; i < episodeList.length; i++) {
     // Creating a div element for each episode
     let divElement = document.createElement ('Div');
     divElement.className = 'episodeContainer';
     divContainer.appendChild (divElement);
-    // Adding h1 to it
+    // Adding h1 to it as a title
     let h1Elem = document.createElement ('h1');
     h1Elem.innerHTML =
       episodeList[i].name +
@@ -39,44 +40,25 @@ function makePageForEpisodes (episodeList) {
       'E' +
       episodeList[i]['number'].toString ().padStart (2, '0');
     divElement.appendChild (h1Elem);
-    // Adding an image to it
+    // Adding an image to the episode
     let imageElem = document.createElement ('img');
     imageElem.src = episodeList[i].image.medium;
     divElement.appendChild (imageElem);
-    // Adding a paragraph to it
+    // Adding a paragraph to it as a summary of the episode
     let paragraph = document.createElement ('P');
     paragraph.innerHTML = episodeList[i].summary.trim ();
     divElement.appendChild (paragraph);
   }
   searchFunc ();
 }
-
 // Search by Listening for keystroke events
 searchInput.addEventListener ('keyup', searchFunc);
-let epiListLength;
-let searchCount;
-let searchKey;
 
-function selectInputLoad (showList) {
-  //Create and append the options of select input
-  let option1 = document.createElement ('option');
-  option1.value = 'All Episodes';
-  option1.text = 'All Episodes';
-  selectList.appendChild (option1);
-  for (let index = 0; index < showList.length; index++) {
-    let option = document.createElement ('option');
-    option.text =
-      'S' +
-      showList[index]['season'].toString ().padStart (2, '0') +
-      'E' +
-      showList[index]['number'].toString ().padStart (2, '0') +
-      ' - ' +
-      showList[index].name;
-    selectList.appendChild (option);
-  }
-}
-
+// filtering the episodes
 function searchFunc () {
+  let epiListLength;
+  let searchCount;
+  let searchKey;
   if (searchInput.value === '') {
     if (selectList.value.substr (0, 6) === 'All Ep') {
       searchKey = '';
@@ -107,7 +89,27 @@ function searchFunc () {
     searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episodes`;
   }
 }
+
 selectList.addEventListener ('change', searchFunc);
+// a function Loading the episode list
+function selectInputLoad (showList) {
+  //Create and append the options of select input
+  let option1 = document.createElement ('option');
+  option1.value = 'All Episodes';
+  option1.text = 'All Episodes';
+  selectList.appendChild (option1);
+  for (let index = 0; index < showList.length; index++) {
+    let option = document.createElement ('option');
+    option.text =
+      'S' +
+      showList[index]['season'].toString ().padStart (2, '0') +
+      'E' +
+      showList[index]['number'].toString ().padStart (2, '0') +
+      ' - ' +
+      showList[index].name;
+    selectList.appendChild (option);
+  }
+}
 
 // Link to the source of data href', 'https://www.tvmaze.com/api#licensing'
 const info = document.createElement ('a');
@@ -115,7 +117,7 @@ const infoPar = document.createElement ('h4');
 infoPar.id = 'tvLink';
 info.setAttribute ('href', 'https://www.tvmaze.com/api#licensing');
 infoPar.innerHTML = 'The data has (originally) come from  ';
-info.innerHTML = 'tvmaze.com';
+info.innerHTML = 'tvmaze.com.';
 infoPar.appendChild (info);
 document.body.appendChild (infoPar);
 window.onload = setup;

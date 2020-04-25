@@ -8,6 +8,7 @@ body {
   flex-direction: column;
 }
 .container {
+  margin: 10px;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -55,7 +56,7 @@ p {
 #tvLink {
   text-align: center;
 }
-#mySelect {
+.mySelect {
   margin: 20px;
   padding: 10px;
   border-radius: 5px;
@@ -93,7 +94,7 @@ input {
   #tvLink {
     text-align: center;
   }
-  #mySelect {
+  .mySelect {
     width: 60%;
   }
   .search {
