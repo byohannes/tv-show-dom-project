@@ -1,9 +1,24 @@
 function setup () {
-  makePageForEpisodes (allEpisodes);
-  selectInputLoad (allEpisodes);
+  fetch("https://api.tvmaze.com/shows/179/episodes")
+  .then((response) => {
+    if (response.status >= 200 && response.status <= 299) {
+      return response.json();
+    } else {
+      throw new Error(
+        `Encountered something unexpected: ${response.status} ${response.statusText}`
+      );
+    }
+  })
+  .then((data)=>{
+    allEpisodes = data;
+    makePageForEpisodes (allEpisodes);
+  selectInputLoad (allEpisodes);})
+  .catch(error=>console.log(error))
+  
 }
 
-const allEpisodes = getAllEpisodes ();
+
+let allEpisodes ;
 const rootElem = document.getElementById ('root');
 //a container for all episodes
 let divContainer = document.createElement ('div');
