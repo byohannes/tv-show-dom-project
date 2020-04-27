@@ -3,7 +3,7 @@ function setup () {
 }
 const shows = getAllShows ();
 
-let allEpisodes ;
+let allEpisodes;
 const rootElem = document.getElementById ('root');
 //a container for all episodes
 let divContainer = document.createElement ('div');
@@ -31,7 +31,7 @@ rootElem.appendChild (divContainer);
 
 function loadAllShows () {
   shows.sort ((show1, show2) => {
-    show2.name.toUpperCase () - show1.name.toUpperCase ();
+    show1.name.toUpperCase () > show2.name.toUpperCase () ? 1 : -1;
   });
   //Create and append the options of select input
   let option1 = document.createElement ('option');
@@ -40,6 +40,7 @@ function loadAllShows () {
   showList.appendChild (option1);
   for (let index = 0; index < shows.length; index++) {
     let option = document.createElement ('option');
+    option.setAttribute ('value', `${shows[index].id}`);
     option.text = shows[index].name;
     showList.appendChild (option);
   }
@@ -51,19 +52,17 @@ let selectedShowId;
 function selectedShow () {
   episodeSelectList.innerHTML = '';
   rootElem.innerHTML = '';
-  selectedShowId = shows.find (show => show.name === showList.value);
-  // console.log (selectedShowId.id);
+  selectedShowId = shows.find (show => show.id === showList.value);
   loadShowEpisodes ();
 }
 
 function loadShowEpisodes () {
-  let selectedUrl = `https://api.tvmaze.com/shows/${selectedShowId.id}/episodes`;
+  let selectedUrl = `https://api.tvmaze.com/shows/${selectedShowId}/episodes`;
   fetch (selectedUrl)
     .then (response => response.json ())
-    .then (data => {
-      allEpisodes = data;
-      makePageForEpisodes (allEpisodes);
-      selectInputLoad (allEpisodes);
+    .then (data => { console.log(data);
+     makePageForEpisodes (data);
+      selectInputLoad (data);
     })
     .catch (error => console.log (error));
 }
