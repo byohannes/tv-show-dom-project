@@ -40,7 +40,6 @@ function loadAllShows () {
   showList.appendChild (option1);
   for (let index = 0; index < shows.length; index++) {
     let option = document.createElement ('option');
-    option.setAttribute ('value', `${shows[index].id}`);
     option.text = shows[index].name;
     showList.appendChild (option);
   }
@@ -51,18 +50,21 @@ let selectedShowId;
 
 function selectedShow () {
   episodeSelectList.innerHTML = '';
-  rootElem.innerHTML = '';
-  selectedShowId = shows.find (show => show.id === showList.value);
+  divContainer.innerHTML = '';
+  selectedShowId = shows.find (show => show.name === showList.value);
+  console.log(selectedShowId.id)
   loadShowEpisodes ();
 }
 
 function loadShowEpisodes () {
-  let selectedUrl = `https://api.tvmaze.com/shows/${selectedShowId}/episodes`;
+  let selectedUrl = `https://api.tvmaze.com/shows/${selectedShowId.id}/episodes`;
   fetch (selectedUrl)
     .then (response => response.json ())
     .then (data => { console.log(data);
-     makePageForEpisodes (data);
-      selectInputLoad (data);
+ allEpisodes=data;
+
+     makePageForEpisodes (allEpisodes);
+      selectInputLoad (allEpisodes);
     })
     .catch (error => console.log (error));
 }

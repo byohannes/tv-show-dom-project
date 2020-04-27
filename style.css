@@ -1,111 +1,113 @@
 body {
-  margin: 0;
-  padding: 0;
-  background-color: lightgray;
+margin: 0;
+padding: 0;
+background-color: lightgray;
 }
 #root {
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
 }
 .container {
-  margin: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+margin: 10px;
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
 }
 .search {
-  width: 90%;
-  display: flex;
-  align-self: center;
-  margin-top: 20px;
-  padding: 5px;
-  border: 2px double black;
+width: 90%;
+display: flex;
+align-self: center;
+margin-top: 20px;
+padding: 5px;
+border: 2px double black;
 }
 .searchEpisode {
+text-align: center;
+margin-top: 30px;
 }
 .episodeContainer {
-  border-radius: 8px;
-  background-color: white;
-  margin: 15px;
-  text-align: center;
-  width: 25%;
-  display: block;
+border-radius: 8px;
+background-color: white;
+margin: 15px;
+text-align: center;
+width: 25%;
+display: block;
 }
 h1 {
-  text-align: center;
-  padding: 10px;
-  font-size: 1.5rem;
-  border-style: outset;
-  border-radius: 8px;
-  margin: 0 0 2rem 0;
+text-align: center;
+padding: 10px;
+font-size: 1.5rem;
+border-style: outset;
+border-radius: 8px;
+margin: 0 0 2rem 0;
 }
 
 img {
-  width: 80%;
-  margin: 5px;
-  height: auto;
-  border-radius: 5px;
+width: 80%;
+margin: 5px;
+height: auto;
+border-radius: 5px;
 }
 p {
-  padding-left: 10px;
-  padding-right: 5px;
-  text-align: left;
+padding-left: 10px;
+padding-right: 5px;
+text-align: left;
 }
 #tvLink {
-  text-align: center;
+text-align: center;
 }
 .episodeSelect {
-  margin: 20px;
-  padding: 10px;
-  border-radius: 5px;
+margin: 20px;
+padding: 10px;
+border-radius: 5px;
 }
 .showSelect {
-  margin: 20px;
-  padding: 10px;
-  border-radius: 5px;
+margin: 20px;
+padding: 10px;
+border-radius: 5px;
 }
 input {
-  width: 150px;
-  margin: 20px;
-  padding: 10px;
-  border-radius: 5px;
+width: 150px;
+margin: 20px;
+padding: 10px;
+border-radius: 5px;
 }
 
 @media (max-width: 758px) {
-  .container {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    align-items: center;
-  }
-  .episodeContainer {
-    width: 90%;
-    margin: 10px;
-    justify-content: center;
-    align-items: baseline;
-  }
-  p {
-    font-size: 20px;
-  }
-  img {
-    width: 70%;
-  }
-  h1 {
-    font-size: 20px;
-    text-align: center;
-  }
-  #tvLink {
-    text-align: center;
-  }
-  .showSelect {
-    width: 60%;
-  }
-  .episodeSelect {
-    width: 60%;
-  }
-  .search {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+.container {
+flex-direction: column;
+align-items: center;
+justify-content: center;
+align-items: center;
+}
+.episodeContainer {
+width: 90%;
+margin: 10px;
+justify-content: center;
+align-items: baseline;
+}
+p {
+font-size: 20px;
+}
+img {
+width: 70%;
+}
+h1 {
+font-size: 20px;
+text-align: center;
+}
+#tvLink {
+text-align: center;
+}
+.showSelect {
+width: 60%;
+}
+.episodeSelect {
+width: 60%;
+}
+.search {
+flex-direction: column;
+justify-content: center;
+align-items: center;
+}
 }
