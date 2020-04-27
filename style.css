@@ -14,7 +14,7 @@ body {
   justify-content: center;
 }
 .search {
-  width: 80%;
+  width: 90%;
   display: flex;
   align-self: center;
   margin-top: 20px;
@@ -22,13 +22,11 @@ body {
   border: 2px double black;
 }
 .searchEpisode {
-  text-align: center;
-  margin-top: 30px;
 }
 .episodeContainer {
   border-radius: 8px;
   background-color: white;
-  margin: 20px;
+  margin: 15px;
   text-align: center;
   width: 25%;
   display: block;
@@ -43,7 +41,9 @@ h1 {
 }
 
 img {
-  width: 90%;
+  width: 80%;
+  margin: 5px;
+  height: auto;
   border-radius: 5px;
 }
 p {
@@ -54,24 +54,41 @@ p {
 #tvLink {
   text-align: center;
 }
-.mySelect {
+.episodeSelect {
+  margin: 20px;
+  padding: 10px;
+  border-radius: 5px;
+}
+.showSelect {
   margin: 20px;
   padding: 10px;
   border-radius: 5px;
 }
 input {
+  width: 150px;
   margin: 20px;
   padding: 10px;
   border-radius: 5px;
 }
 
 @media (max-width: 758px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+  }
   .episodeContainer {
     width: 90%;
     margin: 10px;
+    justify-content: center;
+    align-items: baseline;
   }
   p {
     font-size: 20px;
+  }
+  img {
+    width: 70%;
   }
   h1 {
     font-size: 20px;
@@ -80,11 +97,15 @@ input {
   #tvLink {
     text-align: center;
   }
-  .mySelect {
+  .showSelect {
+    width: 60%;
+  }
+  .episodeSelect {
     width: 60%;
   }
   .search {
     flex-direction: column;
+    justify-content: center;
     align-items: center;
   }
 }

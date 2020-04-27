@@ -1,35 +1,24 @@
 function setup () {
-  fetch("https://api.tvmaze.com/shows/179/episodes")
-  .then((response) => {
-    if (response.status >= 200 && response.status <= 299) {
-      return response.json();
-    } else {
-      throw new Error(
-        `Encountered something unexpected: ${response.status} ${response.statusText}`
-      );
-    }
-  })
-  .then((data)=>{
-    allEpisodes = data;
-    makePageForEpisodes (allEpisodes);
-  selectInputLoad (allEpisodes);})
-  .catch(error=>console.log(error))
-  
+  loadAllShows ();
 }
-
+const shows = getAllShows ();
 
 let allEpisodes ;
 const rootElem = document.getElementById ('root');
 //a container for all episodes
 let divContainer = document.createElement ('div');
 divContainer.className = 'container';
-//Create and append select list
-let selectList = document.createElement ('select');
-selectList.className = 'mySelect';
+//Create and append select show list
+let showList = document.createElement ('select');
+showList.className = 'showSelect';
+//Create and append select episode list
+let episodeSelectList = document.createElement ('select');
+episodeSelectList.className = 'episodeSelect';
 // create a legend for search boxes
 let searchBox = document.createElement ('legend');
 searchBox.innerHTML = 'Search';
-searchBox.appendChild (selectList);
+searchBox.appendChild (showList);
+searchBox.appendChild (episodeSelectList);
 rootElem.appendChild (searchBox).className = 'search';
 let searchInput = document.createElement ('input');
 searchInput.placeholder = 'your search item...';
@@ -39,6 +28,45 @@ let searchLabel = document.createElement ('h3');
 searchLabel.className = 'searchEpisode';
 searchBox.appendChild (searchLabel);
 rootElem.appendChild (divContainer);
+
+function loadAllShows () {
+  shows.sort ((show1, show2) => {
+    show2.name.toUpperCase () - show1.name.toUpperCase ();
+  });
+  //Create and append the options of select input
+  let option1 = document.createElement ('option');
+  option1.value = '--All Shows--';
+  option1.text = '--All Shows--';
+  showList.appendChild (option1);
+  for (let index = 0; index < shows.length; index++) {
+    let option = document.createElement ('option');
+    option.text = shows[index].name;
+    showList.appendChild (option);
+  }
+}
+
+showList.addEventListener ('change', selectedShow);
+let selectedShowId;
+
+function selectedShow () {
+  episodeSelectList.innerHTML = '';
+  rootElem.innerHTML = '';
+  selectedShowId = shows.find (show => show.name === showList.value);
+  // console.log (selectedShowId.id);
+  loadShowEpisodes ();
+}
+
+function loadShowEpisodes () {
+  let selectedUrl = `https://api.tvmaze.com/shows/${selectedShowId.id}/episodes`;
+  fetch (selectedUrl)
+    .then (response => response.json ())
+    .then (data => {
+      allEpisodes = data;
+      makePageForEpisodes (allEpisodes);
+      selectInputLoad (allEpisodes);
+    })
+    .catch (error => console.log (error));
+}
 
 function makePageForEpisodes (episodeList) {
   for (let i = 0; i < episodeList.length; i++) {
@@ -75,15 +103,14 @@ function searchFunc () {
   let searchCount;
   let searchKey;
   if (searchInput.value === '') {
-    if (selectList.value.substr (0, 6) === 'All Ep') {
+    if (episodeSelectList.value.substr (0, 6) === 'All Ep') {
       searchKey = '';
     } else {
-      searchKey = selectList.value.substr (0, 6).toLowerCase ();
+      searchKey = episodeSelectList.value.substr (0, 6).toLowerCase ();
     }
   } else {
     searchKey = searchInput.value.toLowerCase ();
   }
-  console.log (searchKey);
   searchCount = 0;
   let arrayEpisodes = Array.from (
     document.querySelectorAll ('.episodeContainer')
@@ -105,24 +132,24 @@ function searchFunc () {
   }
 }
 
-selectList.addEventListener ('change', searchFunc);
+episodeSelectList.addEventListener ('change', searchFunc);
 // a function Loading the episode list
-function selectInputLoad (showList) {
+function selectInputLoad (episodeList) {
   //Create and append the options of select input
   let option1 = document.createElement ('option');
   option1.value = 'All Episodes';
   option1.text = 'All Episodes';
-  selectList.appendChild (option1);
-  for (let index = 0; index < showList.length; index++) {
+  episodeSelectList.appendChild (option1);
+  for (let index = 0; index < episodeList.length; index++) {
     let option = document.createElement ('option');
     option.text =
       'S' +
-      showList[index]['season'].toString ().padStart (2, '0') +
+      episodeList[index]['season'].toString ().padStart (2, '0') +
       'E' +
-      showList[index]['number'].toString ().padStart (2, '0') +
+      episodeList[index]['number'].toString ().padStart (2, '0') +
       ' - ' +
-      showList[index].name;
-    selectList.appendChild (option);
+      episodeList[index].name;
+    episodeSelectList.appendChild (option);
   }
 }
 
@@ -135,4 +162,5 @@ infoPar.innerHTML = 'The data has (originally) come from  ';
 info.innerHTML = 'tvmaze.com.';
 infoPar.appendChild (info);
 document.body.appendChild (infoPar);
+
 window.onload = setup;
