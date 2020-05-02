@@ -1,7 +1,9 @@
+const shows = getAllShows()
+
 function setup() {
   loadAllShows()
+  makePageForShows(shows)
 }
-const shows = getAllShows()
 
 let allEpisodes
 const rootElem = document.getElementById('root')
@@ -27,7 +29,17 @@ searchInput.setAttribute('type', 'text')
 let searchLabel = document.createElement('h3')
 searchLabel.className = 'searchEpisode'
 searchBox.appendChild(searchLabel)
+//go back navigation button
+let goBackButton = document.createElement('button')
+goBackButton.className = 'back-button'
+goBackButton.innerText = 'Go Back'
+searchBox.appendChild(goBackButton)
+
 rootElem.appendChild(divContainer)
+goBackButton.addEventListener('click', () => {
+  showList.style.display = ''
+  makePageForShows(shows)
+})
 
 function loadAllShows() {
   shows.sort((show1, show2) => {
@@ -38,23 +50,78 @@ function loadAllShows() {
   option1.value = '--All Shows--'
   option1.text = '--All Shows--'
   showList.appendChild(option1)
+  /*
   for (let index = 0; index < shows.length; index++) {
     let option = document.createElement('option')
     option.text = shows[index].name
     showList.appendChild(option)
   }
+  */
 }
-
 showList.addEventListener('change', selectedShow)
-let selectedShowId
 
 function selectedShow() {
   episodeSelectList.innerHTML = ''
   divContainer.innerHTML = ''
   selectedShowId = shows.find((show) => show.name === showList.value)
   if (typeof selectedShowId === 'undefined') {
+    makePageForShows(shows)
   } else {
     loadShowEpisodes()
+  }
+}
+
+let selectedShowId
+
+function makePageForShows(showsListing) {
+  goBackButton.style.display = 'none'
+  episodeSelectList.style.display = 'none'
+  episodeSelectList.innerHTML = ''
+  divContainer.innerHTML = ''
+  searchLabel.innerHTML = `Displaying ${showsListing.length}/${showsListing.length} shows`
+  for (let i = 0; i < showsListing.length; i++) {
+    let showCard = document.createElement('div')
+    //rootElem.insertBefore(currentShowCardEl, rootElem.firstChild);
+    //currentShowCardEl.id = "current-show-card";
+    showCard.className = 'show-card'
+    let showName = document.createElement('h1')
+    showName.innerHTML = showsListing[i].name
+    showCard.appendChild(showName)
+    showName.addEventListener('click', () => {
+      goBackButton.style.display = ''
+      showList.style.display = 'none'
+      episodeSelectList.style.display = ''
+      episodeSelectList.innerHTML = ''
+      divContainer.innerHTML = ''
+      selectedShowId = showsListing[i]
+      loadShowEpisodes()
+    })
+    let showImage = document.createElement('img')
+    showImage.className = 'show-image'
+    showImage.src = showsListing[i].image.medium
+    showImage.addEventListener('click', () => {
+      goBackButton.style.display = ''
+      showList.style.display = 'none'
+      episodeSelectList.style.display = ''
+      episodeSelectList.innerHTML = ''
+      divContainer.innerHTML = ''
+      selectedShowId = showsListing[i]
+      loadShowEpisodes()
+    })
+    showCard.appendChild(showImage)
+    let showInfo = document.createElement('p')
+    showInfo.className = 'show-info'
+    showInfo.innerHTML = `Rating: ${
+      showsListing[i].rating.average
+    }, Generes: ${showsListing[i].genres.join('|')}, Status: ${
+      showsListing[i].status
+    }, Runtime: ${showsListing[i].runtime}`
+    showCard.appendChild(showInfo)
+    let showText = document.createElement('p')
+    showText.className = 'show-summary'
+    showText.innerHTML = showsListing[i].summary.replace(/<\/?[^>]+(>|$)/g, '')
+    showCard.appendChild(showText)
+    divContainer.appendChild(showCard)
   }
 }
 
@@ -87,11 +154,13 @@ function makePageForEpisodes(episodeList) {
     divElement.appendChild(h1Elem)
     // Adding an image to the episode
     let imageElem = document.createElement('img')
+    imageElem.className = 'episode-image'
     imageElem.src = episodeList[i].image.medium
     divElement.appendChild(imageElem)
     // Adding a paragraph to it as a summary of the episode
     let paragraph = document.createElement('P')
-    paragraph.innerHTML = episodeList[i].summary.trim()
+    paragraph.className = 'episode-summary'
+    paragraph.innerHTML = episodeList[i].summary
     divElement.appendChild(paragraph)
   }
   searchFunc()
