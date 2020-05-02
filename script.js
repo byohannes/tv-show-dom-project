@@ -1,11 +1,13 @@
 const shows = getAllShows()
+let allEpisodes
+let selectedShowId
+
 function setup() {
   loadAllShows()
   makePageForShows()
   searchFunc()
 }
 
-let allEpisodes
 const rootElem = document.getElementById('root')
 //a container for all episodes
 let divContainer = document.createElement('div')
@@ -34,8 +36,8 @@ let goBackButton = document.createElement('button')
 goBackButton.className = 'back-button'
 goBackButton.innerText = 'Go Back'
 searchBox.appendChild(goBackButton)
-
 rootElem.appendChild(divContainer)
+
 goBackButton.addEventListener('click', () => {
   showList.style.display = ''
   makePageForShows(shows)
@@ -49,12 +51,8 @@ function loadAllShows() {
   let option1 = document.createElement('option')
   option1.value = '--All Shows--'
   option1.text = '--All Shows--'
-  showList.appendChild(option1)
-  
+  showList.appendChild(option1)  
 }
-
-
-let selectedShowId
 
 function makePageForShows() {
   goBackButton.style.display = 'none'
@@ -148,7 +146,6 @@ function makePageForEpisodes(episodeList) {
 }
 // Search by Listening for keystroke events
 searchInput.addEventListener('keyup', searchFunc)
-
 // filtering  the search
 function searchFunc() {
   let epiListLength
