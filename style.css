@@ -40,6 +40,7 @@ body {
 }
 
 .show-image {
+    height: auto;
   width: 90%;
   margin: 5px;
   border-radius: 5px;
@@ -147,5 +148,29 @@ input {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  .show-card {
+    width: 90%;
+    margin: 10px;
+    justify-content: center;
+    align-items: baseline;
+  }
+  
+  .show-info {
+    padding: 10px;
+    font-size: 20px;
+  }
+  
+  .show-image {
+    width: 90%;
+    margin: 5px;
+    border-radius: 5px;
+  }
+  .show-summary {
+    padding-left: 10px;
+    padding-right: 5px;
+    text-align: left;
+    font-size: 20px;
+    text-decoration: solid;
   }
 }

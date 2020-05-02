@@ -1,8 +1,8 @@
 const shows = getAllShows()
-
 function setup() {
   loadAllShows()
-  makePageForShows(shows)
+  makePageForShows()
+  searchFunc()
 }
 
 let allEpisodes
@@ -50,42 +50,23 @@ function loadAllShows() {
   option1.value = '--All Shows--'
   option1.text = '--All Shows--'
   showList.appendChild(option1)
-  /*
-  for (let index = 0; index < shows.length; index++) {
-    let option = document.createElement('option')
-    option.text = shows[index].name
-    showList.appendChild(option)
-  }
-  */
+  
 }
-showList.addEventListener('change', selectedShow)
 
-function selectedShow() {
-  episodeSelectList.innerHTML = ''
-  divContainer.innerHTML = ''
-  selectedShowId = shows.find((show) => show.name === showList.value)
-  if (typeof selectedShowId === 'undefined') {
-    makePageForShows(shows)
-  } else {
-    loadShowEpisodes()
-  }
-}
 
 let selectedShowId
 
-function makePageForShows(showsListing) {
+function makePageForShows() {
   goBackButton.style.display = 'none'
   episodeSelectList.style.display = 'none'
   episodeSelectList.innerHTML = ''
   divContainer.innerHTML = ''
-  searchLabel.innerHTML = `Displaying ${showsListing.length}/${showsListing.length} shows`
-  for (let i = 0; i < showsListing.length; i++) {
+  searchLabel.innerHTML = `Displaying ${shows.length}/${shows.length} shows`
+  for (let i = 0; i < shows.length; i++) {
     let showCard = document.createElement('div')
-    //rootElem.insertBefore(currentShowCardEl, rootElem.firstChild);
-    //currentShowCardEl.id = "current-show-card";
     showCard.className = 'show-card'
     let showName = document.createElement('h1')
-    showName.innerHTML = showsListing[i].name
+    showName.innerHTML = shows[i].name
     showCard.appendChild(showName)
     showName.addEventListener('click', () => {
       goBackButton.style.display = ''
@@ -93,33 +74,33 @@ function makePageForShows(showsListing) {
       episodeSelectList.style.display = ''
       episodeSelectList.innerHTML = ''
       divContainer.innerHTML = ''
-      selectedShowId = showsListing[i]
+      selectedShowId = shows[i]
       loadShowEpisodes()
     })
     let showImage = document.createElement('img')
     showImage.className = 'show-image'
-    showImage.src = showsListing[i].image.medium
+    showImage.src = shows[i].image.medium
     showImage.addEventListener('click', () => {
       goBackButton.style.display = ''
       showList.style.display = 'none'
       episodeSelectList.style.display = ''
       episodeSelectList.innerHTML = ''
       divContainer.innerHTML = ''
-      selectedShowId = showsListing[i]
+      selectedShowId = shows[i]
       loadShowEpisodes()
     })
     showCard.appendChild(showImage)
     let showInfo = document.createElement('p')
     showInfo.className = 'show-info'
     showInfo.innerHTML = `Rating: ${
-      showsListing[i].rating.average
-    }, Generes: ${showsListing[i].genres.join('|')}, Status: ${
-      showsListing[i].status
-    }, Runtime: ${showsListing[i].runtime}`
+      shows[i].rating.average
+    }, Generes: ${shows[i].genres.join('|')}, Status: ${
+      shows[i].status
+    }, Runtime: ${shows[i].runtime}`
     showCard.appendChild(showInfo)
     let showText = document.createElement('p')
     showText.className = 'show-summary'
-    showText.innerHTML = showsListing[i].summary.replace(/<\/?[^>]+(>|$)/g, '')
+    showText.innerHTML = shows[i].summary.replace(/<\/?[^>]+(>|$)/g, '')
     showCard.appendChild(showText)
     divContainer.appendChild(showCard)
   }
@@ -168,36 +149,59 @@ function makePageForEpisodes(episodeList) {
 // Search by Listening for keystroke events
 searchInput.addEventListener('keyup', searchFunc)
 
-// filtering the episodes
+// filtering  the search
 function searchFunc() {
   let epiListLength
   let searchCount
   let searchKey
-  if (searchInput.value === '') {
-    if (episodeSelectList.value.substr(0, 6) === 'All Ep') {
-      searchKey = ''
+  if (episodeSelectList.style.display === '') {
+    if (searchInput.value === '') {
+      if (episodeSelectList.value.substr(0, 6) === 'All Ep') {
+        searchKey = ''
+      } else {
+        searchKey = episodeSelectList.value.substr(0, 6).toLowerCase()
+      }
     } else {
-      searchKey = episodeSelectList.value.substr(0, 6).toLowerCase()
+      searchKey = searchInput.value.toLowerCase()
+    }
+    searchCount = 0
+    let arrayEpisodes = Array.from(
+      document.querySelectorAll('.episodeContainer'),
+    )
+    epiListLength = arrayEpisodes.length
+    arrayEpisodes.forEach((show) => {
+      let textInfo = show.innerText.toLowerCase()
+      if (textInfo.indexOf(searchKey) > -1) {
+        show.style.display = ''
+        searchCount += 1
+      } else {
+        show.style.display = 'none'
+      }
+    })
+    if (searchCount == 1) {
+      searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episode`
+    } else {
+      searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episodes`
     }
   } else {
     searchKey = searchInput.value.toLowerCase()
-  }
-  searchCount = 0
-  let arrayEpisodes = Array.from(document.querySelectorAll('.episodeContainer'))
-  epiListLength = arrayEpisodes.length
-  arrayEpisodes.forEach((show) => {
-    let textInfo = show.innerText.toLowerCase()
-    if (textInfo.indexOf(searchKey) > -1) {
-      show.style.display = ''
-      searchCount += 1
+    searchCount = 0
+    let showsArray = Array.from(document.querySelectorAll('.show-card'))
+    showsListLength = showsArray.length
+    showsArray.forEach((show) => {
+      let textInfo = show.innerHTML.toLowerCase()
+      if (textInfo.indexOf(searchKey) > -1) {
+        show.style.display = ''
+        searchCount += 1
+      } else {
+        show.style.display = 'none'
+      }
+    })
+    if (searchCount == 1) {
+      searchLabel.innerHTML = `Displaying ${searchCount}/${showsListLength} show`
     } else {
-      show.style.display = 'none'
+      searchLabel.innerHTML = `Displaying ${searchCount}/${showsListLength} shows`
     }
-  })
-  if (searchCount == 1) {
-    searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episode`
-  } else {
-    searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episodes`
   }
 }
 
