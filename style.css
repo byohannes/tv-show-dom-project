@@ -21,12 +21,30 @@ body {
   padding: 5px;
   border: 2px double black;
 }
-.searchEpisode {
-  text-align: center;
-  margin-top: 30px;
+.search input{
+    margin: 20px auto;
+    padding: 10px;
 }
+.search episodeSelect{
+    margin: 30px auto;
+    padding: 10px;
+ }
+ 
+ .search h3{
+    text-align: center;
+    margin: 30px 50px 30px 0px;
+ }
+.show-more {
+  background-color: white;
+  margin: 5px;
+  color: blue;
+  border: none;
+  outline: none;
+}
+
 .show-card {
   width: 30%;
+  height: fit-content;
   border-radius: 8px;
   background-color: white;
   margin: 15px;
@@ -35,21 +53,26 @@ body {
 }
 
 .show-info {
-  padding: 10px;
-  font-size: 20px;
+  font-size: 18px;
+}
+.truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .show-image {
-    height: auto;
+  height: 40%;
   width: 90%;
   margin: 5px;
   border-radius: 5px;
 }
+
 .show-summary {
   padding-left: 10px;
   padding-right: 5px;
   text-align: left;
-  font-size: 20px;
+  font-size: 18px;
   text-decoration: solid;
 }
 .episodeContainer {
@@ -87,6 +110,7 @@ h1 {
   margin: 20px;
   padding: 10px;
   border-radius: 5px;
+  outline: none;
 }
 .back-button {
   background-color: white;
@@ -95,6 +119,7 @@ h1 {
   border: 2px solid black;
   border-radius: 5px;
   transition-duration: 0.4s;
+  outline: none;
 }
 .back-button:hover {
   background-color: lightgray;
@@ -104,12 +129,14 @@ h1 {
   margin: 20px;
   padding: 10px;
   border-radius: 5px;
+  outline: none;
 }
 input {
   width: 150px;
   margin: 20px;
   padding: 10px;
   border-radius: 5px;
+  outline: none;
 }
 
 @media (max-width: 758px) {
@@ -149,18 +176,19 @@ input {
     justify-content: center;
     align-items: center;
   }
+  
   .show-card {
     width: 90%;
     margin: 10px;
     justify-content: center;
     align-items: baseline;
   }
-  
+
   .show-info {
     padding: 10px;
     font-size: 20px;
   }
-  
+
   .show-image {
     width: 90%;
     margin: 5px;

@@ -41,6 +41,7 @@ rootElem.appendChild(divContainer)
 goBackButton.addEventListener('click', () => {
   showList.style.display = ''
   makePageForShows(shows)
+  searchFunc()
 })
 
 function loadAllShows() {
@@ -51,7 +52,7 @@ function loadAllShows() {
   let option1 = document.createElement('option')
   option1.value = '--All Shows--'
   option1.text = '--All Shows--'
-  showList.appendChild(option1)  
+  showList.appendChild(option1)
 }
 
 function makePageForShows() {
@@ -59,7 +60,6 @@ function makePageForShows() {
   episodeSelectList.style.display = 'none'
   episodeSelectList.innerHTML = ''
   divContainer.innerHTML = ''
-  searchLabel.innerHTML = `Displaying ${shows.length}/${shows.length} shows`
   for (let i = 0; i < shows.length; i++) {
     let showCard = document.createElement('div')
     showCard.className = 'show-card'
@@ -77,7 +77,12 @@ function makePageForShows() {
     })
     let showImage = document.createElement('img')
     showImage.className = 'show-image'
-    showImage.src = shows[i].image.medium
+    if (shows[i].image === null) {
+      showImage.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
+    } else {
+      showImage.src = shows[i].image.medium
+    }
+
     showImage.addEventListener('click', () => {
       goBackButton.style.display = ''
       showList.style.display = 'none'
@@ -90,16 +95,36 @@ function makePageForShows() {
     showCard.appendChild(showImage)
     let showInfo = document.createElement('p')
     showInfo.className = 'show-info'
-    showInfo.innerHTML = `Rating: ${
-      shows[i].rating.average
-    }, Generes: ${shows[i].genres.join('|')}, Status: ${
-      shows[i].status
-    }, Runtime: ${shows[i].runtime}`
+    showInfo.innerHTML = `Rating: ${shows[i].rating.average}, Generes: ${shows[
+      i
+    ].genres.join('|')}, Status: ${shows[i].status}, Runtime: ${
+      shows[i].runtime
+    }`
     showCard.appendChild(showInfo)
     let showText = document.createElement('p')
-    showText.className = 'show-summary'
-    showText.innerHTML = shows[i].summary.replace(/<\/?[^>]+(>|$)/g, '')
+    showText.className = 'show-summary truncate'
+    shows[i].summary === null
+      ? (showText.innerText = ' The summary of this show is coming soon.')
+      : (showText.innerText = shows[i].summary.replace(/<\/?[^>]+(>|$)/g, ''))
+    let toggleButton = document.createElement('button')
+
+    let toggleStatus = 'less'
+
+    toggleButton.innerText = '...Show more'
+    toggleButton.className = 'show-more'
+    toggleButton.addEventListener('click', () => {
+      if (toggleStatus === 'less') {
+        showText.classList.remove('truncate')
+        toggleButton.innerText = '...Show less'
+        toggleStatus = 'full'
+      } else {
+        showText.classList.add('truncate')
+        toggleButton.innerText = '...Show more'
+        toggleStatus = 'less'
+      }
+    })
     showCard.appendChild(showText)
+    showCard.appendChild(toggleButton)
     divContainer.appendChild(showCard)
   }
 }
@@ -134,12 +159,20 @@ function makePageForEpisodes(episodeList) {
     // Adding an image to the episode
     let imageElem = document.createElement('img')
     imageElem.className = 'episode-image'
-    imageElem.src = episodeList[i].image.medium
+    if (imageElem.image === null) {
+      imageElem.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
+    } else {
+      imageElem.src = episodeList[i].image.medium
+    }
+
     divElement.appendChild(imageElem)
     // Adding a paragraph to it as a summary of the episode
     let paragraph = document.createElement('P')
     paragraph.className = 'episode-summary'
-    paragraph.innerHTML = episodeList[i].summary
+    episodeList[i].summary === null
+      ? (paragraph.innerText = ' The summary of this episode is coming soon.')
+      : (paragraph.innerHTML = episodeList[i].summary)
+
     divElement.appendChild(paragraph)
   }
   searchFunc()
