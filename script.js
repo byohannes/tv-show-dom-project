@@ -40,14 +40,13 @@ rootElem.appendChild(divContainer)
 
 goBackButton.addEventListener('click', () => {
   showList.style.display = ''
+  divShow.innerHTML = ''
   makePageForShows(shows)
   searchFunc()
 })
 
 function loadAllShows() {
-  shows.sort((show1, show2) => {
-    show1.name.toUpperCase() > show2.name.toUpperCase() ? 1 : -1
-  })
+  shows.sort((a, b) => (a.name > b.name ? 1 : -1))
   //Create and append the options of select input
   let option1 = document.createElement('option')
   option1.value = '--All Shows--'
@@ -73,6 +72,7 @@ function makePageForShows() {
       episodeSelectList.innerHTML = ''
       divContainer.innerHTML = ''
       selectedShowId = shows[i]
+      displayCurrentShow(selectedShowId)
       loadShowEpisodes()
     })
     let showImage = document.createElement('img')
@@ -127,6 +127,67 @@ function makePageForShows() {
     showCard.appendChild(toggleButton)
     divContainer.appendChild(showCard)
   }
+}
+let divShow
+function displayCurrentShow(currentShow) {
+  divShow = document.createElement('div')
+  divShow.className = 'current-show'
+  divContainer.appendChild(divShow)
+  divContainer.before(divShow)
+  let divLink = document.createElement('div')
+  divLink.className = 'current-show-title'
+  divShow.appendChild(divLink)
+
+  let link = document.createElement('a')
+  link.className = 'link-title'
+  divLink.appendChild(link)
+
+  link.innerText = currentShow.name
+
+  let containerShow = document.createElement('div')
+  containerShow.className = 'current-show-container'
+  divShow.appendChild(containerShow)
+
+  let divImage = document.createElement('div')
+  containerShow.appendChild(divImage)
+
+  let imageShow = document.createElement('img')
+  imageShow.className = 'current-show-image'
+  divImage.appendChild(imageShow)
+
+  if (currentShow.image === null) {
+    imageShow.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
+  } else {
+    imageShow.src = currentShow.image.medium
+  }
+
+  let summaryDiv = document.createElement('div')
+  containerShow.appendChild(summaryDiv)
+
+  let showSummary = document.createElement('p')
+  showSummary.className = 'current-show-summary'
+  if (currentShow.summary === null) {
+    showSummary.innerText = 'The summary of this show is coming soon.'
+  } else {
+    showSummary.innerText = currentShow.summary.replace(/<\/?[^>]+(>|$)/g, '')
+  }
+  summaryDiv.appendChild(showSummary)
+
+  let detailsDiv = document.createElement('div')
+  detailsDiv.className = 'current-show-info'
+  containerShow.appendChild(detailsDiv)
+  let rated = document.createElement('p')
+  rated.innerText = `Rating: ${currentShow.rating.average}`
+  detailsDiv.appendChild(rated)
+  let genre = document.createElement('p')
+  genre.innerText = `Genres: ${currentShow.genres.join('|')}`
+  detailsDiv.appendChild(genre)
+  let status = document.createElement('p')
+  status.innerText = `Status: ${currentShow.status}`
+  detailsDiv.appendChild(status)
+  let runtime = document.createElement('p')
+  runtime.innerText = `Runtime: ${currentShow.runtime}`
+  detailsDiv.appendChild(runtime)
 }
 
 function loadShowEpisodes() {
