@@ -10,31 +10,31 @@ function setup() {
 
 const rootElem = document.getElementById('root')
 //a container for all episodes
-let divContainer = document.createElement('div')
+let divContainer = createHtmlElement('div')
 divContainer.className = 'container'
 //Create and append select show list
-let showList = document.createElement('select')
+let showList = createHtmlElement('select')
 showList.className = 'showSelect'
 //Create and append select episode list
-let episodeSelectList = document.createElement('select')
+let episodeSelectList = createHtmlElement('select')
 episodeSelectList.className = 'episodeSelect'
 // create a legend for search boxes
-let searchBox = document.createElement('legend')
+let searchBox = createHtmlElement('legend')
 searchBox.innerHTML = 'Search'
 searchBox.appendChild(showList)
 searchBox.appendChild(episodeSelectList)
 rootElem.appendChild(searchBox).className = 'search'
-let searchInput = document.createElement('input')
+let searchInput = createHtmlElement('input')
 searchInput.placeholder = 'your search item...'
 searchBox.appendChild(searchInput)
 searchInput.setAttribute('type', 'text')
-let searchLabel = document.createElement('h3')
+let searchLabel = createHtmlElement('h3')
 searchLabel.className = 'searchEpisode'
 searchBox.appendChild(searchLabel)
 //go back navigation button
-let goBackButton = document.createElement('button')
+let goBackButton = createHtmlElement('button')
 goBackButton.className = 'back-button'
-goBackButton.innerText = 'Go Back'
+goBackButton.innerText = 'Home'
 searchBox.appendChild(goBackButton)
 rootElem.appendChild(divContainer)
 
@@ -45,13 +45,22 @@ goBackButton.addEventListener('click', () => {
   searchFunc()
 })
 
+function createHtmlElement(element) {
+  return document.createElement(element)
+}
+
 function loadAllShows() {
   shows.sort((a, b) => (a.name > b.name ? 1 : -1))
-  //Create and append the options of select input
+  //Create and append the options of select input of shows
   let option1 = document.createElement('option')
   option1.value = '--All Shows--'
   option1.text = '--All Shows--'
   showList.appendChild(option1)
+  for (let index = 0; index < shows.length; index++) {
+    let option = document.createElement('option')
+    option.text = shows[index].name
+    showList.appendChild(option)
+  }
 }
 
 function makePageForShows() {
@@ -60,9 +69,9 @@ function makePageForShows() {
   episodeSelectList.innerHTML = ''
   divContainer.innerHTML = ''
   for (let i = 0; i < shows.length; i++) {
-    let showCard = document.createElement('div')
+    let showCard = createHtmlElement('div')
     showCard.className = 'show-card'
-    let showName = document.createElement('h1')
+    let showName = createHtmlElement('h1')
     showName.innerHTML = shows[i].name
     showCard.appendChild(showName)
     showName.addEventListener('click', () => {
@@ -75,7 +84,7 @@ function makePageForShows() {
       displayCurrentShow(selectedShowId)
       loadShowEpisodes()
     })
-    let showImage = document.createElement('img')
+    let showImage = createHtmlElement('img')
     showImage.className = 'show-image'
     if (shows[i].image === null) {
       showImage.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
@@ -93,7 +102,7 @@ function makePageForShows() {
       loadShowEpisodes()
     })
     showCard.appendChild(showImage)
-    let showInfo = document.createElement('p')
+    let showInfo = createHtmlElement('p')
     showInfo.className = 'show-info'
     showInfo.innerHTML = `Rating: ${shows[i].rating.average}, Generes: ${shows[
       i
@@ -101,12 +110,12 @@ function makePageForShows() {
       shows[i].runtime
     }`
     showCard.appendChild(showInfo)
-    let showText = document.createElement('p')
+    let showText = createHtmlElement('p')
     showText.className = 'show-summary truncate'
     shows[i].summary === null
       ? (showText.innerText = ' The summary of this show is coming soon.')
       : (showText.innerText = shows[i].summary.replace(/<\/?[^>]+(>|$)/g, ''))
-    let toggleButton = document.createElement('button')
+    let toggleButton = createHtmlElement('button')
 
     let toggleStatus = 'less'
 
@@ -130,28 +139,28 @@ function makePageForShows() {
 }
 let divShow
 function displayCurrentShow(currentShow) {
-  divShow = document.createElement('div')
+  divShow = createHtmlElement('div')
   divShow.className = 'current-show'
   divContainer.appendChild(divShow)
   divContainer.before(divShow)
-  let divLink = document.createElement('div')
+  let divLink = createHtmlElement('div')
   divLink.className = 'current-show-title'
   divShow.appendChild(divLink)
 
-  let link = document.createElement('a')
+  let link = createHtmlElement('a')
   link.className = 'link-title'
   divLink.appendChild(link)
 
   link.innerText = currentShow.name
 
-  let containerShow = document.createElement('div')
+  let containerShow = createHtmlElement('div')
   containerShow.className = 'current-show-container'
   divShow.appendChild(containerShow)
 
-  let divImage = document.createElement('div')
+  let divImage = createHtmlElement('div')
   containerShow.appendChild(divImage)
 
-  let imageShow = document.createElement('img')
+  let imageShow = createHtmlElement('img')
   imageShow.className = 'current-show-image'
   divImage.appendChild(imageShow)
 
@@ -161,10 +170,10 @@ function displayCurrentShow(currentShow) {
     imageShow.src = currentShow.image.medium
   }
 
-  let summaryDiv = document.createElement('div')
+  let summaryDiv = createHtmlElement('div')
   containerShow.appendChild(summaryDiv)
 
-  let showSummary = document.createElement('p')
+  let showSummary = createHtmlElement('p')
   showSummary.className = 'current-show-summary'
   if (currentShow.summary === null) {
     showSummary.innerText = 'The summary of this show is coming soon.'
@@ -173,23 +182,23 @@ function displayCurrentShow(currentShow) {
   }
   summaryDiv.appendChild(showSummary)
 
-  let detailsDiv = document.createElement('div')
+  let detailsDiv = createHtmlElement('div')
   detailsDiv.className = 'current-show-info'
   containerShow.appendChild(detailsDiv)
-  let rated = document.createElement('p')
+  let rated = createHtmlElement('p')
   rated.innerText = `Rating: ${currentShow.rating.average}`
   detailsDiv.appendChild(rated)
-  let genre = document.createElement('p')
+  let genre = createHtmlElement('p')
   genre.innerText = `Genres: ${currentShow.genres.join('|')}`
   detailsDiv.appendChild(genre)
-  let status = document.createElement('p')
+  let status = createHtmlElement('p')
   status.innerText = `Status: ${currentShow.status}`
   detailsDiv.appendChild(status)
-  let runtime = document.createElement('p')
+  let runtime = createHtmlElement('p')
   runtime.innerText = `Runtime: ${currentShow.runtime}`
   detailsDiv.appendChild(runtime)
 }
-
+//fetch show episodes
 function loadShowEpisodes() {
   let selectedUrl = `https://api.tvmaze.com/shows/${selectedShowId.id}/episodes`
   fetch(selectedUrl)
@@ -205,11 +214,11 @@ function loadShowEpisodes() {
 function makePageForEpisodes(episodeList) {
   for (let i = 0; i < episodeList.length; i++) {
     // Creating a div element for each episode
-    let divElement = document.createElement('Div')
+    let divElement = createHtmlElement('Div')
     divElement.className = 'episodeContainer'
     divContainer.appendChild(divElement)
     // Adding h1 to it as a title
-    let h1Elem = document.createElement('h1')
+    let h1Elem = createHtmlElement('h1')
     h1Elem.innerHTML =
       episodeList[i].name +
       ' - S' +
@@ -218,7 +227,7 @@ function makePageForEpisodes(episodeList) {
       episodeList[i]['number'].toString().padStart(2, '0')
     divElement.appendChild(h1Elem)
     // Adding an image to the episode
-    let imageElem = document.createElement('img')
+    let imageElem = createHtmlElement('img')
     imageElem.className = 'episode-image'
     if (imageElem.image === null) {
       imageElem.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
@@ -228,7 +237,7 @@ function makePageForEpisodes(episodeList) {
 
     divElement.appendChild(imageElem)
     // Adding a paragraph to it as a summary of the episode
-    let paragraph = document.createElement('P')
+    let paragraph = createHtmlElement('P')
     paragraph.className = 'episode-summary'
     episodeList[i].summary === null
       ? (paragraph.innerText = ' The summary of this episode is coming soon.')
@@ -297,15 +306,15 @@ function searchFunc() {
 }
 
 episodeSelectList.addEventListener('change', searchFunc)
-// a function Loading the episode list
+// a function Loading the episode select menu list
 function selectInputLoad(episodeList) {
   //Create and append the options of select input
-  let option1 = document.createElement('option')
+  let option1 = createHtmlElement('option')
   option1.value = 'All Episodes'
   option1.text = 'All Episodes'
   episodeSelectList.appendChild(option1)
   for (let index = 0; index < episodeList.length; index++) {
-    let option = document.createElement('option')
+    let option = createHtmlElement('option')
     option.text =
       'S' +
       episodeList[index]['season'].toString().padStart(2, '0') +
@@ -318,8 +327,8 @@ function selectInputLoad(episodeList) {
 }
 
 // Link to the source of data href', 'https://www.tvmaze.com/api#licensing'
-const info = document.createElement('a')
-const infoPar = document.createElement('h4')
+const info = createHtmlElement('a')
+const infoPar = createHtmlElement('h4')
 infoPar.id = 'tvLink'
 info.setAttribute('href', 'https://www.tvmaze.com/api#licensing')
 infoPar.innerHTML = 'The data has (originally) come from  '
