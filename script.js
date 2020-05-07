@@ -95,7 +95,7 @@ function renderSingleShow(show) {
   })
   let showImage = createHtmlElement('img')
   showImage.className = 'show-image'
-  if (show.image === null) {
+  if (show.image === null || show.image === '') {
     showImage.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
   } else {
     showImage.src = show.image.medium
@@ -123,7 +123,7 @@ function renderSingleShow(show) {
 
   let showText = createHtmlElement('p')
   showText.className = 'show-summary truncate'
-  show.summary === null
+  show.summary === null || show.summary === ''
     ? (showText.innerText = ' The summary of this show is coming soon.')
     : (showText.innerText = show.summary.replace(/<\/?[^>]+(>|$)/g, ''))
 
@@ -175,7 +175,7 @@ function displayCurrentShow(currentShow) {
   imageShow.className = 'current-show-image'
   divImage.appendChild(imageShow)
 
-  if (currentShow.image === null) {
+  if (currentShow.image === null || currentShow.image === '') {
     imageShow.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
   } else {
     imageShow.src = currentShow.image.medium
@@ -186,7 +186,7 @@ function displayCurrentShow(currentShow) {
 
   let showSummary = createHtmlElement('p')
   showSummary.className = 'current-show-summary'
-  if (currentShow.summary === null) {
+  if (currentShow.summary === null || currentShow.summary === '') {
     showSummary.innerText = 'The summary of this show is coming soon.'
   } else {
     showSummary.innerText = currentShow.summary.replace(/<\/?[^>]+(>|$)/g, '')
@@ -246,7 +246,7 @@ function renderSingleEpisode(episode) {
   // Adding an image to the episode
   let imageElem = createHtmlElement('img')
   imageElem.className = 'episode-image'
-  if (imageElem.image === null) {
+  if (imageElem.image === null || imageElem.image === '') {
     imageElem.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
   } else {
     imageElem.src = episode.image.medium
@@ -256,7 +256,7 @@ function renderSingleEpisode(episode) {
   // Adding a paragraph to it as a summary of the episode
   let paragraph = createHtmlElement('P')
   paragraph.className = 'episode-summary'
-  episode.summary === null
+  episode.summary === null || episode.summary === ''
     ? (paragraph.innerText = ' The summary of this episode is coming soon.')
     : (paragraph.innerHTML = episode.summary)
 
@@ -358,5 +358,3 @@ infoPar.innerHTML = 'The data has (originally) come from  '
 info.innerHTML = 'tvmaze.com.'
 infoPar.appendChild(info)
 document.body.appendChild(infoPar)
-
-
