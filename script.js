@@ -15,9 +15,11 @@ divContainer.className = 'container'
 //Create and append select show list
 let showList = createHtmlElement('select')
 showList.className = 'showSelect'
+showList.addEventListener('change', searchShow)
 //Create and append select episode list
 let episodeSelectList = createHtmlElement('select')
 episodeSelectList.className = 'episodeSelect'
+episodeSelectList.addEventListener('change', searchEpisode)
 // create a legend for search boxes
 let searchBox = createHtmlElement('legend')
 searchBox.innerHTML = 'Search'
@@ -69,74 +71,81 @@ function makePageForShows() {
   episodeSelectList.innerHTML = ''
   divContainer.innerHTML = ''
   for (let i = 0; i < shows.length; i++) {
-    let showCard = createHtmlElement('div')
-    showCard.className = 'show-card'
-    let showName = createHtmlElement('h1')
-    showName.innerHTML = shows[i].name
-    showCard.appendChild(showName)
-    showName.addEventListener('click', () => {
-      goBackButton.style.display = ''
-      showList.style.display = 'none'
-      episodeSelectList.style.display = ''
-      episodeSelectList.innerHTML = ''
-      divContainer.innerHTML = ''
-      selectedShowId = shows[i]
-      displayCurrentShow(selectedShowId)
-      loadShowEpisodes()
-    })
-    let showImage = createHtmlElement('img')
-    showImage.className = 'show-image'
-    if (shows[i].image === null) {
-      showImage.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
-    } else {
-      showImage.src = shows[i].image.medium
-    }
-
-    showImage.addEventListener('click', () => {
-      goBackButton.style.display = ''
-      showList.style.display = 'none'
-      episodeSelectList.style.display = ''
-      episodeSelectList.innerHTML = ''
-      divContainer.innerHTML = ''
-      selectedShowId = shows[i]
-      loadShowEpisodes()
-    })
-    showCard.appendChild(showImage)
-    let showInfo = createHtmlElement('p')
-    showInfo.className = 'show-info'
-    showInfo.innerHTML = `Rating: ${shows[i].rating.average}, Generes: ${shows[
-      i
-    ].genres.join('|')}, Status: ${shows[i].status}, Runtime: ${
-      shows[i].runtime
-    }`
-    showCard.appendChild(showInfo)
-    let showText = createHtmlElement('p')
-    showText.className = 'show-summary truncate'
-    shows[i].summary === null
-      ? (showText.innerText = ' The summary of this show is coming soon.')
-      : (showText.innerText = shows[i].summary.replace(/<\/?[^>]+(>|$)/g, ''))
-    let toggleButton = createHtmlElement('button')
-
-    let toggleStatus = 'less'
-
-    toggleButton.innerText = '...Show more'
-    toggleButton.className = 'show-more'
-    toggleButton.addEventListener('click', () => {
-      if (toggleStatus === 'less') {
-        showText.classList.remove('truncate')
-        toggleButton.innerText = '...Show less'
-        toggleStatus = 'full'
-      } else {
-        showText.classList.add('truncate')
-        toggleButton.innerText = '...Show more'
-        toggleStatus = 'less'
-      }
-    })
-    showCard.appendChild(showText)
-    showCard.appendChild(toggleButton)
-    divContainer.appendChild(showCard)
+    renderSingleShow(shows[i])
   }
 }
+
+function renderSingleShow(show) {
+  let showCard = createHtmlElement('div')
+  showCard.className = 'show-card'
+  let showName = createHtmlElement('h1')
+  showName.innerHTML = show.name
+  showCard.appendChild(showName)
+  showName.addEventListener('click', () => {
+    goBackButton.style.display = ''
+    showList.style.display = 'none'
+    episodeSelectList.style.display = ''
+    episodeSelectList.innerHTML = ''
+    divContainer.innerHTML = ''
+    selectedShowId = show
+    displayCurrentShow(selectedShowId)
+    loadShowEpisodes()
+  })
+  let showImage = createHtmlElement('img')
+  showImage.className = 'show-image'
+  if (show.image === null) {
+    showImage.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
+  } else {
+    showImage.src = show.image.medium
+  }
+
+  showImage.addEventListener('click', () => {
+    goBackButton.style.display = ''
+    showList.style.display = 'none'
+    episodeSelectList.style.display = ''
+    episodeSelectList.innerHTML = ''
+    divContainer.innerHTML = ''
+    selectedShowId = show
+    loadShowEpisodes()
+  })
+  showCard.appendChild(showImage)
+
+  let showInfo = createHtmlElement('p')
+  showInfo.className = 'show-info'
+  showInfo.innerHTML = `Rating: ${
+    show.rating.average
+  }, Generes: ${show.genres.join('|')}, Status: ${show.status}, Runtime: ${
+    show.runtime
+  }`
+  showCard.appendChild(showInfo)
+
+  let showText = createHtmlElement('p')
+  showText.className = 'show-summary truncate'
+  show.summary === null
+    ? (showText.innerText = ' The summary of this show is coming soon.')
+    : (showText.innerText = show.summary.replace(/<\/?[^>]+(>|$)/g, ''))
+
+  let toggleButton = createHtmlElement('button')
+  let toggleStatus = 'less'
+  toggleButton.innerText = '...Show more'
+  toggleButton.className = 'show-more'
+  toggleButton.addEventListener('click', () => {
+    if (toggleStatus === 'less') {
+      showText.classList.remove('truncate')
+      toggleButton.innerText = '...Show less'
+      toggleStatus = 'full'
+    } else {
+      showText.classList.add('truncate')
+      toggleButton.innerText = '...Show more'
+      toggleStatus = 'less'
+    }
+  })
+
+  showCard.appendChild(showText)
+  showCard.appendChild(toggleButton)
+  divContainer.appendChild(showCard)
+}
+
 let divShow
 function displayCurrentShow(currentShow) {
   divShow = createHtmlElement('div')
@@ -203,7 +212,7 @@ function loadShowEpisodes() {
   let selectedUrl = `https://api.tvmaze.com/shows/${selectedShowId.id}/episodes`
   fetch(selectedUrl)
     .then((response) => response.json())
-    .then((data) => { 
+    .then((data) => {
       allEpisodes = data
       makePageForEpisodes(allEpisodes)
       selectInputLoad(allEpisodes)
@@ -213,99 +222,56 @@ function loadShowEpisodes() {
 
 function makePageForEpisodes(episodeList) {
   for (let i = 0; i < episodeList.length; i++) {
-    // Creating a div element for each episode
-    let divElement = createHtmlElement('Div')
-    divElement.className = 'episodeContainer'
-    divContainer.appendChild(divElement)
-    // Adding h1 to it as a title
-    let h1Elem = createHtmlElement('h1')
-    h1Elem.innerHTML =
-      episodeList[i].name +
-      ' - S' +
-      episodeList[i]['season'].toString().padStart(2, '0') +
-      'E' +
-      episodeList[i]['number'].toString().padStart(2, '0')
-    divElement.appendChild(h1Elem)
-    // Adding an image to the episode
-    let imageElem = createHtmlElement('img')
-    imageElem.className = 'episode-image'
-    if (imageElem.image === null) {
-      imageElem.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
-    } else {
-      imageElem.src = episodeList[i].image.medium
-    }
-
-    divElement.appendChild(imageElem)
-    // Adding a paragraph to it as a summary of the episode
-    let paragraph = createHtmlElement('P')
-    paragraph.className = 'episode-summary'
-    episodeList[i].summary === null
-      ? (paragraph.innerText = ' The summary of this episode is coming soon.')
-      : (paragraph.innerHTML = episodeList[i].summary)
-
-    divElement.appendChild(paragraph)
+    renderSingleEpisode(episodeList[i])
   }
   searchFunc()
 }
+
+function renderSingleEpisode(episode) {
+  // Creating a div element for each episode
+  let divElement = createHtmlElement('Div')
+  divElement.className = 'episodeContainer'
+  divContainer.appendChild(divElement)
+  // Adding h1 to it as a title
+  let h1Elem = createHtmlElement('h1')
+  h1Elem.innerHTML =
+    episode.name +
+    ' - S' +
+    episode['season'].toString().padStart(2, '0') +
+    'E' +
+    episode['number'].toString().padStart(2, '0')
+  divElement.appendChild(h1Elem)
+  // Adding an image to the episode
+  let imageElem = createHtmlElement('img')
+  imageElem.className = 'episode-image'
+  if (imageElem.image === null) {
+    imageElem.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
+  } else {
+    imageElem.src = episode.image.medium
+  }
+
+  divElement.appendChild(imageElem)
+  // Adding a paragraph to it as a summary of the episode
+  let paragraph = createHtmlElement('P')
+  paragraph.className = 'episode-summary'
+  episode.summary === null
+    ? (paragraph.innerText = ' The summary of this episode is coming soon.')
+    : (paragraph.innerHTML = episode.summary)
+
+  divElement.appendChild(paragraph)
+}
+
 // Search by Listening for keystroke events
 searchInput.addEventListener('keyup', searchFunc)
 // filtering  the search
 function searchFunc() {
-  let epiListLength
-  let searchCount
-  let searchKey
   if (episodeSelectList.style.display === '') {
-    if (searchInput.value === '') {
-      if (episodeSelectList.value.substr(0, 6) === 'All Ep') {
-        searchKey = ''
-      } else {
-        searchKey = episodeSelectList.value.substr(0, 6).toLowerCase()
-      }
-    } else {
-      searchKey = searchInput.value.toLowerCase()
-    }
-    searchCount = 0
-    let arrayEpisodes = Array.from(
-      document.querySelectorAll('.episodeContainer'),
-    )
-    epiListLength = arrayEpisodes.length
-    arrayEpisodes.forEach((show) => {
-      let textInfo = show.innerText.toLowerCase()
-      if (textInfo.indexOf(searchKey) > -1) {
-        show.style.display = ''
-        searchCount += 1
-      } else {
-        show.style.display = 'none'
-      }
-    })
-    if (searchCount == 1) {
-      searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episode`
-    } else {
-      searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episodes`
-    }
+    searchEpisode()
   } else {
-    searchKey = searchInput.value.toLowerCase()
-    searchCount = 0
-    let showsArray = Array.from(document.querySelectorAll('.show-card'))
-    showsListLength = showsArray.length
-    showsArray.forEach((show) => {
-      let textInfo = show.innerHTML.toLowerCase()
-      if (textInfo.indexOf(searchKey) > -1) {
-        show.style.display = ''
-        searchCount += 1
-      } else {
-        show.style.display = 'none'
-      }
-    })
-    if (searchCount == 1) {
-      searchLabel.innerHTML = `Displaying ${searchCount}/${showsListLength} show`
-    } else {
-      searchLabel.innerHTML = `Displaying ${searchCount}/${showsListLength} shows`
-    }
+    searchShow()
   }
 }
 
-episodeSelectList.addEventListener('change', searchFunc)
 // a function Loading the episode select menu list
 function selectInputLoad(episodeList) {
   //Create and append the options of select input
@@ -326,6 +292,61 @@ function selectInputLoad(episodeList) {
   }
 }
 
+function searchEpisode() {
+  let epiListLength
+  let searchCount
+  let searchKey
+  if (searchInput.value === '') {
+    if (episodeSelectList.value.substr(0, 6) === 'All Ep') {
+      searchKey = ''
+    } else {
+      searchKey = episodeSelectList.value.substr(0, 6).toLowerCase()
+    }
+  } else {
+    searchKey = searchInput.value.toLowerCase()
+  }
+  searchCount = 0
+  let arrayEpisodes = Array.from(document.querySelectorAll('.episodeContainer'))
+  epiListLength = arrayEpisodes.length
+  arrayEpisodes.forEach((show) => {
+    let textInfo = show.innerText.toLowerCase()
+    if (textInfo.indexOf(searchKey) > -1) {
+      show.style.display = ''
+      searchCount += 1
+    } else {
+      show.style.display = 'none'
+    }
+  })
+  if (searchCount == 1) {
+    searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episode`
+  } else {
+    searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episodes`
+  }
+}
+function searchShow() {
+  let epiListLength
+  let searchCount
+  let searchKey
+  searchKey = searchInput.value.toLowerCase()
+  searchCount = 0
+  
+  let showsArray = Array.from(document.querySelectorAll('.show-card'))
+  showsListLength = showsArray.length
+  showsArray.forEach((show) => {
+    let textInfo = show.innerHTML.toLowerCase()
+    if (textInfo.indexOf(searchKey) > -1) {
+      show.style.display = ''
+      searchCount += 1
+    } else {
+      show.style.display = 'none'
+    }
+  })
+  if (searchCount == 1) {
+    searchLabel.innerHTML = `Displaying ${searchCount}/${showsListLength} show`
+  } else {
+    searchLabel.innerHTML = `Displaying ${searchCount}/${showsListLength} shows`
+  }
+}
 // Link to the source of data href', 'https://www.tvmaze.com/api#licensing'
 const info = createHtmlElement('a')
 const infoPar = createHtmlElement('h4')
