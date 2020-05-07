@@ -1,3 +1,5 @@
+window.onload = setup
+
 const shows = getAllShows()
 let allEpisodes
 let selectedShowId
@@ -329,7 +331,7 @@ function searchShow() {
   let searchKey
   searchKey = searchInput.value.toLowerCase()
   searchCount = 0
-  
+
   let showsArray = Array.from(document.querySelectorAll('.show-card'))
   showsListLength = showsArray.length
   showsArray.forEach((show) => {
@@ -357,4 +359,4 @@ info.innerHTML = 'tvmaze.com.'
 infoPar.appendChild(info)
 document.body.appendChild(infoPar)
 
-window.onload = setup
+
