@@ -203,7 +203,7 @@ function loadShowEpisodes() {
   let selectedUrl = `https://api.tvmaze.com/shows/${selectedShowId.id}/episodes`
   fetch(selectedUrl)
     .then((response) => response.json())
-    .then((data) => {
+    .then((data) => { 
       allEpisodes = data
       makePageForEpisodes(allEpisodes)
       selectInputLoad(allEpisodes)
