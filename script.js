@@ -74,8 +74,11 @@ function selectedShow() {
         divShow.innerHTML = ''
         makePageForShows()
     } else {
-        episodeSelectList.innerHTML = '';
-        divContainer.innerHTML = '';
+        goBackButton.style.display = ''
+        showList.style.display = 'none'
+        episodeSelectList.style.display = ''
+        episodeSelectList.innerHTML = ''
+        divContainer.innerHTML = ''
         selectedShowInfo = shows.find(show => show.name === showList.value);
         displayCurrentShow(selectedShowInfo)
         loadShowEpisodes();
