@@ -260,7 +260,7 @@ function renderSingleEpisode(episode) {
         // Adding an image to the episode
     let imageElem = createHtmlElement('img')
     imageElem.className = 'episode-image'
-    if (imageElem.image === null || imageElem.image === '') {
+    if (episode.image === null || episode.image === '') {
         imageElem.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png'
     } else {
         imageElem.src = episode.image.medium
