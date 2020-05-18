@@ -1,8 +1,8 @@
 window.onload = setup;
-
+// getAllShows() is defined on file shows.js
 const shows = getAllShows();
 let allEpisodes;
-let selectedShowId;
+let selectedShowInfo;
 
 function setup() {
   loadAllShows();
@@ -24,6 +24,7 @@ episodeSelectList.className = 'episodeSelect';
 episodeSelectList.addEventListener('change', searchEpisode);
 // create a legend for search boxes
 let searchBox = createHtmlElement('legend');
+// eslint-disable-next-line no-restricted-properties
 searchBox.innerHTML = 'Search';
 searchBox.appendChild(showList);
 searchBox.appendChild(episodeSelectList);
@@ -44,6 +45,7 @@ rootElem.appendChild(divContainer);
 
 goBackButton.addEventListener('click', () => {
   showList.style.display = '';
+  // eslint-disable-next-line no-restricted-properties
   divShow.innerHTML = '';
   makePageForShows(shows);
   searchFunc();
@@ -67,16 +69,17 @@ function loadAllShows() {
   }
 }
 showList.addEventListener('change', selectedShow);
-let selectedShowInfo;
 
 function selectedShow() {
   if (showList.value === '--All Shows--') {
+    // eslint-disable-next-line no-restricted-properties
     divShow.innerHTML = '';
     makePageForShows();
   } else {
     goBackButton.style.display = '';
     showList.style.display = 'none';
     episodeSelectList.style.display = '';
+    // eslint-disable-next-lines no-restricted-properties
     episodeSelectList.innerHTML = '';
     divContainer.innerHTML = '';
     selectedShowInfo = shows.find((show) => show.name === showList.value);
@@ -88,6 +91,7 @@ function selectedShow() {
 function makePageForShows() {
   goBackButton.style.display = 'none';
   episodeSelectList.style.display = 'none';
+  // eslint-disable-next-lines no-restricted-properties
   episodeSelectList.innerHTML = '';
   divContainer.innerHTML = '';
   for (let i = 0; i < shows.length; i++) {
@@ -99,12 +103,14 @@ function renderSingleShow(show) {
   let showCard = createHtmlElement('div');
   showCard.className = 'show-card';
   let showName = createHtmlElement('h1');
+  // eslint-disable-next-line no-restricted-properties
   showName.innerHTML = show.name;
   showCard.appendChild(showName);
   showName.addEventListener('click', () => {
     goBackButton.style.display = '';
     showList.style.display = 'none';
     episodeSelectList.style.display = '';
+    // eslint-disable-next-lines no-restricted-properties
     episodeSelectList.innerHTML = '';
     divContainer.innerHTML = '';
     selectedShowInfo = show;
@@ -113,16 +119,15 @@ function renderSingleShow(show) {
   });
   let showImage = createHtmlElement('img');
   showImage.className = 'show-image';
-  if (show.image === null || show.image === '') {
-    showImage.src = 'https://dozenpixels.com/static/img/blog/coming-soon.png';
-  } else {
-    showImage.src = show.image.medium;
-  }
+  show.image === null || show.image === ''
+    ? (showImage.src =
+        'https://dozenpixels.com/static/img/blog/coming-soon.png')
+    : (showImage.src = show.image.medium);
 
   showCard.appendChild(showImage);
-
   let showInfo = createHtmlElement('p');
   showInfo.className = 'show-info';
+  // eslint-disable-next-line no-restricted-properties
   showInfo.innerHTML = `Rating: ${
     show.rating.average
   }, Generes: ${show.genres.join('|')}, Status: ${show.status}, Runtime: ${
@@ -246,12 +251,13 @@ function renderSingleEpisode(episode) {
   divContainer.appendChild(divElement);
   // Adding h1 to it as a title
   let h1Elem = createHtmlElement('h1');
+  // eslint-disable-next-line no-restricted-properties
   h1Elem.innerHTML =
     episode.name +
     ' - S' +
-    episode['season'].toString().padStart(2, '0') +
+    episode.season.toString().padStart(2, '0') +
     'E' +
-    episode['number'].toString().padStart(2, '0');
+    episode.number.toString().padStart(2, '0');
   divElement.appendChild(h1Elem);
   // Adding an image to the episode
   let imageElem = createHtmlElement('img');
@@ -268,7 +274,7 @@ function renderSingleEpisode(episode) {
   paragraph.className = 'episode-summary';
   episode.summary === null || episode.summary === ''
     ? (paragraph.innerText = ' The summary of this episode is coming soon.')
-    : (paragraph.innerHTML = episode.summary);
+    : (paragraph.innerText = episode.summary.replace(/<\/?[^>]+(>|$)/g, ''));
 
   divElement.appendChild(paragraph);
 }
@@ -295,9 +301,9 @@ function selectInputLoad(episodeList) {
     let option = createHtmlElement('option');
     option.text =
       'S' +
-      episodeList[index]['season'].toString().padStart(2, '0') +
+      episodeList[index].season.toString().padStart(2, '0') +
       'E' +
-      episodeList[index]['number'].toString().padStart(2, '0') +
+      episodeList[index].number.toString().padStart(2, '0') +
       ' - ' +
       episodeList[index].name;
     episodeSelectList.appendChild(option);
@@ -332,9 +338,9 @@ function searchEpisode() {
     }
   });
   if (searchCount === 1) {
-    searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episode`;
+    searchLabel.innerText = `Displaying ${searchCount}/${epiListLength} episode`;
   } else {
-    searchLabel.innerHTML = `Displaying ${searchCount}/${epiListLength} episodes`;
+    searchLabel.innerText = `Displaying ${searchCount}/${epiListLength} episodes`;
   }
 }
 
@@ -348,7 +354,7 @@ function searchShow() {
   let showsArray = Array.from(document.querySelectorAll('.show-card'));
   showsListLength = showsArray.length;
   showsArray.forEach((show) => {
-    let textInfo = show.innerHTML.toLowerCase();
+    let textInfo = show.innerText.toLowerCase();
     if (textInfo.indexOf(searchKey) > -1) {
       show.style.display = '';
       searchCount += 1;
@@ -357,9 +363,9 @@ function searchShow() {
     }
   });
   if (searchCount === 1) {
-    searchLabel.innerHTML = `Displaying ${searchCount}/${showsListLength} show`;
+    searchLabel.innerText = `Displaying ${searchCount}/${showsListLength} show`;
   } else {
-    searchLabel.innerHTML = `Displaying ${searchCount}/${showsListLength} shows`;
+    searchLabel.innerText = `Displaying ${searchCount}/${showsListLength} shows`;
   }
 }
 // Link to the source of data href', 'https://www.tvmaze.com/api#licensing'
@@ -367,7 +373,7 @@ const info = createHtmlElement('a');
 const infoPar = createHtmlElement('h4');
 infoPar.id = 'tvLink';
 info.setAttribute('href', 'https://www.tvmaze.com/api#licensing');
-infoPar.innerHTML = 'The data has (originally) come from  ';
-info.innerHTML = 'tvmaze.com.';
+infoPar.innerText = 'The data has (originally) come from  ';
+info.innerText = 'tvmaze.com.';
 infoPar.appendChild(info);
 document.body.appendChild(infoPar);
